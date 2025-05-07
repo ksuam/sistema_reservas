@@ -17,22 +17,21 @@ import io.micrometer.common.lang.NonNull;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 
-
 public interface ReservationService {
 
     // Crea una nueva reserva, si no existe un solapamiento
     Reservation createReservation(CreateReservationRequestDTO request);
 
-    // Obtiene todas las reservas de un usuario
     List<Reservation> findByUserId(Long userId);
 
     // Verifica si ya existe un conflicto en el espacio y las fechas solicitadas
     boolean hasConflict(Long spaceId, LocalDateTime startTime, LocalDateTime endTime);
 
-   Reservation updateReservation(Long id, UpdateReservationRequestDTO requestDTO);
+    Reservation updateReservation(Long id, UpdateReservationRequestDTO requestDTO);
 
     void deleteReservation(Long reservationId);
 
     Reservation findById(Long id);
+
     List<Reservation> findAllReservations();
 }

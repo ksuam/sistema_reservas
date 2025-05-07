@@ -1,0 +1,60 @@
+<div
+  class="flex justify-content-center align-items-center min-h-screen bg-gray-100 bg-black-alpha-10 mt-5 rounded-lg border-round-3xl"
+>
+  <p-toast [position]="'bottom-right'" />
+  <div
+    class="flex align-items-center justify-content-center"
+    style="width: 600px"
+  >
+    <form
+      class="bg-white shadow-lg rounded-lg p-6 border-round-3xl"
+      [formGroup]="form()"
+      (ngSubmit)="auth()"
+    >
+      <h2 class="text-center text-2xl font-semibold mb-6">BIENVENIDO</h2>
+
+      <div class="field mt-5">
+        <p-floatLabel>
+          <input
+          required
+            pInputText
+            formControlName="username"
+            type="text"
+          />
+          <label for="username">Username</label>
+        </p-floatLabel>
+        <small
+        class="p-error"
+        *ngIf="form().controls['username'].errors?.['required']"
+      >
+        Username es obligatorio.
+      </small>
+      </div>
+
+      <div class="field mt-5">
+        <p-floatLabel>
+          <input
+          required
+            pInputText
+            formControlName="password"
+            type="password"
+          />
+          <label for="password">Password</label>
+        </p-floatLabel>
+        <small
+        class="p-error"
+        *ngIf="form().controls['password'].errors?.['required']"
+      >
+        Password es obligatoria.
+      </small>
+      </div>
+
+
+
+        <p-button type="submit" label="Ingresar" icon="pi pi-check"></p-button>
+
+    </form>
+    <!-- {{ fomr2().value | json }}
+    {{ user | json }} -->
+  </div>
+</div>

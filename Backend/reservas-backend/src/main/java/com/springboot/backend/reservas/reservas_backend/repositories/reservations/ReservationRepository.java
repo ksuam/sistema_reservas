@@ -14,7 +14,6 @@ import com.springboot.backend.reservas.reservas_backend.entities.Reservation;
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
     
-    // Método para obtener todas las reservas de un usuario
     List<Reservation> findAllByUserId(Long userId);
 
 

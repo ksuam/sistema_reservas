@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.springboot.backend.reservas.reservas_backend.entities.Space;
 import com.springboot.backend.reservas.reservas_backend.services.spaces.SpaceService;
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 
 @RestController
 @RequestMapping("/api/spaces")
-@CrossOrigin(origins = "*")
 public class SpaceController {
 
     @Autowired
@@ -42,11 +42,11 @@ public class SpaceController {
         return ResponseEntity.ok(spaceService.save(space));
     }
 
-@PatchMapping("/{id}")
-public ResponseEntity<Space> partialUpdateSpace(@PathVariable Long id, @RequestBody Space space) {
-    Space updated = spaceService.partialUpdate(id, space);
-    return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
-}
+    @PatchMapping("/{id}")
+    public ResponseEntity<Space> partialUpdateSpace(@PathVariable Long id, @RequestBody Space space) {
+        Space updated = spaceService.partialUpdate(id, space);
+        return updated != null ? ResponseEntity.ok(updated) : ResponseEntity.notFound().build();
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSpace(@PathVariable Long id) {

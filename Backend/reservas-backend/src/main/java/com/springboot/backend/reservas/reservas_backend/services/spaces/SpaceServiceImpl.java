@@ -33,18 +33,19 @@ public class SpaceServiceImpl implements SpaceService {
     @Override
     public Space partialUpdate(Long id, Space space) {
         Optional<Space> optional = spaceRepository.findById(id);
-        if (optional.isEmpty()) return null;
-    
+        if (optional.isEmpty())
+            return null;
+
         Space existing = optional.get();
-    
+
         if (space.getName() != null) {
             existing.setName(space.getName());
         }
-    
+
         if (space.getDescription() != null) {
             existing.setDescription(space.getDescription());
         }
-    
+
         return spaceRepository.save(existing);
     }
 

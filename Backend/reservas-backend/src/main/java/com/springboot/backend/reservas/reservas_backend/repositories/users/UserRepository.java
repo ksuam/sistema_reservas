@@ -1,6 +1,7 @@
 package com.springboot.backend.reservas.reservas_backend.repositories.users;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -11,4 +12,6 @@ import com.springboot.backend.reservas.reservas_backend.entities.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findAll();
     boolean existsByEmail(String email);
+    Optional<User> findByUsernameAndPassword(String username, String password);
+
 }

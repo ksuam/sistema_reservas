@@ -38,10 +38,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User patch(Long id, Map<String, Object> updates) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) return null;
-    
+        if (optionalUser.isEmpty())
+            return null;
+
         User user = optionalUser.get();
-    
+
         updates.forEach((key, value) -> {
             switch (key) {
                 case "name" -> user.setName((String) value);
@@ -50,12 +51,17 @@ public class UserServiceImpl implements UserService {
                 case "password" -> user.setPassword((String) value);
             }
         });
-    
+
         return userRepository.save(user);
     }
 
     @Override
     public void delete(Long id) {
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<User> findByUsernameAndPassword(String username, String password) {
+        return userRepository.findByUsernameAndPassword(username, password);
     }
 }

@@ -14,10 +14,6 @@ import com.springboot.backend.reservas.reservas_backend.entities.Space;
 import com.springboot.backend.reservas.reservas_backend.entities.User;
 import com.springboot.backend.reservas.reservas_backend.repositories.reservations.ReservationRepository;
 import com.springboot.backend.reservas.reservas_backend.repositories.spaces.SpaceRepository;
-import com.springboot.backend.reservas.reservas_backend.repositories.users.UserRepository;
-
-import io.micrometer.common.lang.NonNull;
-import jakarta.transaction.Transactional;
 
 @Service
 public class ReservationServiceImpl implements ReservationService {
@@ -33,7 +29,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation createReservation(CreateReservationRequestDTO request) {
-        // Extraer datos del DTO
         Long userId = request.getUserId();
         Long spaceId = request.getSpaceId();
         LocalDateTime startTime = request.getStartTime();
@@ -46,8 +41,8 @@ public class ReservationServiceImpl implements ReservationService {
 
         // Crear nueva reserva
         Reservation reservation = Reservation.builder()
-                .user(new User(userId)) // Suponiendo que ya existe la entidad UserEntity
-                .space(new Space(spaceId)) // Suponiendo que ya existe la entidad SpaceEntity
+                .user(new User(userId))
+                .space(new Space(spaceId))
                 .startTime(startTime)
                 .endTime(endTime)
                 .createdAt(LocalDateTime.now())
@@ -105,7 +100,6 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public Reservation findById(Long id) {
-        // Buscar la reserva por ID
         Optional<Reservation> optionalReserva = reservationRepository.findById(id);
 
         // Si no se encuentra la reserva, retornamos null

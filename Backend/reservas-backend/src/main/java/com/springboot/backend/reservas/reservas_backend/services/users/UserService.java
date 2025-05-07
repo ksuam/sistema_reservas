@@ -1,4 +1,5 @@
 package com.springboot.backend.reservas.reservas_backend.services.users;
+
 import com.springboot.backend.reservas.reservas_backend.entities.User;
 
 import java.util.List;
@@ -12,8 +13,10 @@ public interface UserService {
     Optional<User> findById(Long id);
 
     User save(User user);
+
     User patch(Long id, Map<String, Object> updates);
 
     void delete(Long id);
-}
 
+    Optional<User> findByUsernameAndPassword(String username, String password);
+}

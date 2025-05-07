@@ -1,0 +1,218 @@
+<div class="card">
+  <p-toast />
+  <p-toolbar styleClass="flex mb-4 mt-4 justify-content-center" *ngIf="isMobileView">
+
+      <p-button
+        styleClass="add"
+        severity="success"
+        label="Nuevo"
+        icon="pi pi-plus"
+        class="mr-2"
+        (onClick)="openNew()"
+      />
+
+
+  </p-toolbar>
+  <div class="flex justify-content-center mt-5" *ngIf="!isMobileView">
+    <div>
+      <!-- Tabla de Reservas -->
+      <p-table
+        #dt
+        [value]="reservations"
+        [rows]="10"
+        [paginator]="true"
+        [globalFilterFields]="['name', 'user.name', 'space.name','startTime']"
+        [tableStyle]="{ 'min-width': '75rem' }"
+        dataKey="id"
+        currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+        [showCurrentPageReport]="true"
+      >
+        <ng-template pTemplate="caption">
+          <div class="flex align-items-center justify-content-between">
+            <span class="p-input-icon-left">
+              <i class="pi pi-search"></i>
+              <input
+                pInputText
+                type="text"
+                (input)="dt.filterGlobal($any($event.target).value, 'contains')"
+                placeholder="Buscar..."
+              />
+            </span>
+
+              <p-button
+                severity="success"
+                label="Nuevo"
+                icon="pi pi-plus"
+                class="mr-2"
+                (onClick)="openNew()"
+              />
+
+          </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+          <tr>
+            <th pSortableColumn="user.name">Cliente <p-sortIcon /></th>
+
+            <th pSortableColumn="space.name">Espacio <p-sortIcon /></th>
+            <th>Fecha Inicio </th>
+            <th>Fecha Final </th>
+
+            <th></th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-reservation>
+          <tr>
+            <td>{{ reservation.user.name }}</td>
+            <td>
+              {{ reservation.space.name }}
+            </td>
+
+            <td>
+              {{ reservation.startTime }}
+            </td>
+            <td>
+              {{ reservation.endTime }}
+            </td>
+
+            <td>
+              <p-button
+                icon="pi pi-pencil"
+                class="mr-2"
+                [rounded]="true"
+                [outlined]="true"
+                severity="success"
+                (onClick)="editReservation(reservation)"
+              />
+              <p-button
+                icon="pi pi-trash"
+                severity="danger"
+                [rounded]="true"
+                [outlined]="true"
+                (onClick)="deleteReservation(reservation)"
+              />
+            </td>
+          </tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+  <!-- Pop up de actualizacion -->
+  <form [formGroup]="form()" (submit)="saveReservation()">
+    <p-dialog
+      [(visible)]="reservationDialog"
+      [style]="{ width: '100vw', height: '100vh' }"
+      header="Detalles Usuario"
+      [modal]="true"
+      styleClass="p-fluid"
+    >
+      <ng-template pTemplate="content">
+        <div class="field">
+          <label for="inventoryStatus">Espacio</label>
+          <p-dropdown
+            formControlName="spaceId"
+            optionLabel="name"
+            optionValue="id"
+            [options]="spaces"
+            required
+          >
+          </p-dropdown>
+          <small
+            class="p-error"
+            *ngIf="form().controls['spaceId'].errors?.['required']"
+          >
+            Espacio es obligatorio.
+          </small>
+        </div>
+
+>
+
+        <!-- Grupo primer y segundo nombre -->
+        <div class="formgrid grid">
+          <!-- StarTime -->
+          <div class="field col mb-4">
+            <label for="icondisplay" class="font-bold block mb-2"> Fecha Inicio </label>
+            <p-calendar
+            required
+                formControlName="startTime"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                />
+            <small
+              class="p-error"
+              *ngIf="form().controls['startTime'].errors?.['required']"
+              >Fecha inicio es Obligatoria</small
+            >
+          </div>
+          <!-- EndTime -->
+          <div class="fiel col">
+            <label for="icondisplay" class="font-bold block mb-2"> Fecha Finalizacion </label>
+            <p-calendar
+            required
+                formControlName="endTime"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                 />
+            <small
+              class="p-error"
+              *ngIf="form().controls['endTime'].errors?.['required']"
+              >Fecha Finalizacion es Obligatoria</small
+            >
+          </div>
+        </div>
+        <small class="p-error" *ngIf="form().errors?.['dateRangeInvalid']">
+          La duración debe ser de mínimo 1 día y máximo 2 días.
+        </small>
+        <!-- {{form().value | json}} -->
+      </ng-template>
+
+      <ng-template pTemplate="footer">
+        <p-button
+          label="Cancel"
+          icon="pi pi-times"
+          [text]="true"
+          (onClick)="hideDialog()"
+        />
+        <p-button [disabled]="form().invalid" label="Guardar" type="submit" />
+  <!-- {{form().value | json}} -->
+
+      </ng-template>
+    </p-dialog>
+  </form>
+
+  <p-confirmDialog [style]="{ width: '450px' }" />
+
+  <!-- Tabla Reservas movil -->
+  <div class="card-list" *ngIf="isMobileView">
+    <div class="cliente-card  align-items-center" *ngFor="let reservation of reservations">
+      <div class="mt-2"><strong>Cliente:</strong> {{ reservation.user!.name }}</div>
+      <div class="mt-2"><strong>Espacio</strong> {{ reservation.space!.name }}</div>
+
+      <div class="mt-2"><strong>Fecha Inicio:</strong> {{ reservation.startTime }}</div>
+      <div class="mt-2"><strong>Fecha Finalizacion:</strong> {{ reservation.endTime }}</div>
+      <div class="mt-2">
+        <div class=" flex justify-content-center mt-4">
+          <p-button
+            icon="pi pi-pencil"
+            class="mr-2"
+            [rounded]="true"
+            [outlined]="true"
+            severity="success"
+            (onClick)="editReservation(reservation)"
+          >
+          </p-button>
+
+          <p-button
+            icon="pi pi-trash"
+            severity="danger"
+            [rounded]="true"
+            [outlined]="true"
+            (onClick)="deleteReservation(reservation)"/>
+
+      </div>
+
+      <!-- Mensaje de error en vista móvil -->
+
+    </div>
+
+  </div>
+</div>

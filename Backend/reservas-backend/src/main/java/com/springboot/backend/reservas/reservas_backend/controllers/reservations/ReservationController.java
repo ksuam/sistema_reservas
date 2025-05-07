@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -32,6 +33,7 @@ import com.springboot.backend.reservas.reservas_backend.services.reservations.Re
 import com.springboot.backend.reservas.reservas_backend.services.reservations.ReservationServiceImpl;
 
 import lombok.RequiredArgsConstructor;
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
 
 @RestController
 @RequestMapping("/reserva")
@@ -41,17 +43,16 @@ public class ReservationController {
     private ReservationServiceImpl reservationServiceImpl;
 
     @GetMapping("/todas")
-public ResponseEntity<?> listarTodasLasReservas() {
-    try {
-        List<Reservation> reservas = reservationServiceImpl.findAllReservations();
-        return ResponseEntity.ok(reservas);
-    } catch (Exception e) {
-        return ResponseEntity.badRequest().body(new ExceptionControl(
-                String.valueOf(HttpStatus.BAD_REQUEST.value()),
-                e.getMessage()
-        ));
+    public ResponseEntity<?> listarTodasLasReservas() {
+        try {
+            List<Reservation> reservas = reservationServiceImpl.findAllReservations();
+            return ResponseEntity.ok(reservas);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(new ExceptionControl(
+                    String.valueOf(HttpStatus.BAD_REQUEST.value()),
+                    e.getMessage()));
+        }
     }
-}
 
     @PostMapping("/crear")
     public ResponseEntity<?> crearReserva(@RequestBody CreateReservationRequestDTO request) {
@@ -107,7 +108,6 @@ public ResponseEntity<?> listarTodasLasReservas() {
     @GetMapping("/detalle/{id}")
     public ResponseEntity<?> obtenerReservaPorId(@PathVariable Long id) {
         try {
-            // Llamamos al servicio para obtener la reserva
             Reservation reserva = reservationServiceImpl.findById(id);
 
             // Si no se encuentra la reserva, retornamos un error 404
